@@ -1,0 +1,46 @@
+Develop an application that asks a Icecast server and retrieves the number of concurrent listeners.
+
+Develop an application that returns the Icecast server with the lowest number of concurrent listeners.
+
+Develop an Icecast tracker. This is an client application that, given a list of Icecast servers, request from the servers the number of current listeners and return one of the severs with the smallest number of listeners.
+
+wget http://150.214.150.68:4551/status.xsl
+wget http://150.214.150.68:4551/status2.xsl
+
+1. Icecast tracker.
+
+Among other data, an Icecast server returns throught HTTP a
+"status2.xsl page" which indicates the number of concurrent listeners
+that are connected to the server. On the other hand, it is possible
+that the same stream is served by more than one process using
+relying. In this context, an Icecast tracker is a HTTP server that,
+given a channel, retrieves the "status2.xsl" pages of a list of
+Icecast servers and returns one of the Icecast servers with the
+smallest number of listeners. An example:
+
+Listener  Tracker  Server   Relay1   Relay2
+   |         |        |        |        |
+   +----1--->|        |        |        |
+   |         +---2--->|        |        |
+   |         |<---3---+        |        |
+   |         +---2----|------->|        |
+   |         |<---3---|--------+        |
+   |         +---2----|--------|------->|
+   |         |<---3---|--------|--------|
+   |<---4----+        |        |        |
+   +----1----|--------|------->|        |
+   |<===5====|========|========+        |
+
+   1 = GET stream
+   2 = GET status2
+   3 = OK status
+   4 = NOT FOUND BUT TRY AT ...
+   5 = OK stream
+
+https://www.fladi.at/posts/load-balancing-icecast-relays/
+https://pypi.python.org/pypi/django-icecast-balancer/0.1.4
+
+2. Live streaming.
+
+3. P2PSP.
+
